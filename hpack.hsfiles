@@ -1,0 +1,146 @@
+{-# START_FILE package.yaml #-}
+name:                {{name}}
+version:             0.1.0.0
+#synopsis:
+homepage:            https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}#readme
+license:             MIT
+author:              {{author-name}}{{^author-name}}Author name here{{/author-name}}
+maintainer:          {{author-email}}{{^author-email}}example@example.com{{/author-email}}
+copyright:           {{year}}{{^year}}2019{{/year}} {{author-name}}{{^author-name}}Author name here{{/author-name}}
+category:            {{category}}{{^category}}Web{{/category}}
+extra-source-files:
+- README.md
+
+description: >
+    Please see the README on Github at 
+    <https://github.com/{{github-username}}{{^github-username}}githubuser{{/github-username}}/{{name}}#readme>
+
+flags:
+  pedantic:
+    description: Pass additional warning flags and -Werror to GHC.
+    default: True
+    manual: True
+
+dependencies:
+  - base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+  ghc-options:
+    - -Wall
+    - -Wimplicit-prelude
+    - -Wmissing-import-lists
+  when:
+    - condition: flag(pedantic)
+      ghc-options: -Werror
+
+executables:
+  {{name}}:
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+      - -Wimplicit-prelude
+      - -Wmissing-import-lists
+    dependencies:
+      - {{name}}
+
+tests:
+  {{name}}-hlint-test:
+    main: hlint-test-exe.hs
+    source-dirs: test
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+      - -Wimplicit-prelude
+      - -Wmissing-import-lists
+    dependencies:
+      - {{name}}
+      - hlint-test >= 0.1.0.0
+
+  {{name}}-test:
+    main: Spec.hs
+    source-dirs:
+      - test
+      - src
+    ghc-options:
+      - -threaded
+      - -Wall
+      - -rtsopts
+      - -with-rtsopts=-N
+      - -Wimplicit-prelude
+      - -Wmissing-import-lists
+    cpp-options: -DTEST
+    dependencies:
+      - tasty
+      - tasty-hunit
+
+{-# START_FILE Setup.hs #-}
+import Distribution.Simple
+main = defaultMain
+
+{-# START_FILE app/Main.hs #-}
+{-# LANGUAGE NoImplicitPrelude #-}
+module Main where
+
+import System.IO (IO)
+
+import Lib (doStuff)
+
+main :: IO ()
+main = doStuff
+
+{-# START_FILE src/Lib.hs #-}
+{-# LANGUAGE NoImplicitPrelude #-}
+module Lib where
+
+import System.IO (IO, putStrLn)
+
+doStuff :: IO ()
+doStuff = putStrLn "hello world"
+
+{-# START_FILE test/hlint-test-exe.hs #-}
+{-# OPTIONS_GHC -F -pgmF hlint-test -optF src/Rest.hs #-}
+
+{-# START_FILE test/Spec.hs #-}
+{-# LANGUAGE NoImplicitPrelude #-}
+
+import System.IO (IO)
+import Test.Tasty (TestTree, defaultMain, testGroup)
+
+
+main :: IO ()
+main = defaultMain tests
+
+tests :: TestTree
+tests = testGroup "Tests"
+    [
+    ]
+
+{-# START_FILE README.md #-}
+# {{name}}
+
+{-# START_FILE LICENSE #-}
+Copyright {{year}}{{^year}}2019{{/year}} {{author-name}}{{^author-name}}Author name here{{/author-name}}
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

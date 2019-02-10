@@ -32,20 +32,7 @@ import           Test.Mockery.Directory
 import           WithCli
 
 excluded :: [String]
-excluded =
-  "foundation" : -- foundation package is not available on stackage
-  "ghcjs-old-base" : -- ghcjs takes too long to setup
-  "ghcjs" : -- ghcjs takes too long to setup
-  "hakyll-template" : -- hakyll takes an excessive amount of time to compile its dependencies
-  "quickcheck-test-framework" : -- test-suite fails (probably intentionally)
-  "simple-hpack" : -- stack init fails on missing cabal file (fixed in stack on master)
-  "tasty-discover" : -- contains a stack file, makes `stack new` choke
-  "yesod-mongo" : -- needs a running db instance
-  "yesod-mysql" : -- needs a running db instance
-  "yesod-postgres-fay" : -- needs a running db instance
-  "yesod-postgres" : -- needs a running db instance
-  "yesod-sqlite" : -- missing CSFR cookie?
-  []
+excluded = ["hpack"]
 
 isExcluded :: FilePath -> Bool
 isExcluded file = dropExtension file `elem` excluded
