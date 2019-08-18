@@ -62,7 +62,7 @@ tests:
       - hlint-test >= 0.1.0.0
 
   {{name}}-test:
-    main: Spec.hs
+    main: spec.hs
     source-dirs:
       - test
       - src
@@ -105,7 +105,7 @@ doStuff = putStrLn "hello world"
 {-# START_FILE test/hlint-test-exe.hs #-}
 {-# OPTIONS_GHC -F -pgmF hlint-test -optF src/Rest.hs #-}
 
-{-# START_FILE test/Spec.hs #-}
+{-# START_FILE test/spec.hs #-}
 {-# LANGUAGE NoImplicitPrelude #-}
 
 import System.IO (IO)
